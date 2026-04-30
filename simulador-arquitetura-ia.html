@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simulador de Arquitetura de IA — Devfy Leaders</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="simulador-arquitetura-ia.css" />
+</head>
+<body>
+
+<nav>
+  <a href="https://leaders.devfy.co" class="nav-logo">
+    <img src="LOGO_URL_AQUI" alt="Devfy Leaders" />
+  </a>
+  <div class="nav-right">
+    <span class="save-indicator" id="save-indicator"></span>
+    <button class="btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="clearProgress()">Limpar progresso</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-pill">Devfy Leaders · Módulo IA</div>
+  <h1>Simulador de Arquitetura de IA</h1>
+  <p>Mapeie o processo, descubra o nível de autonomia certo e chegue à E3 com uma ficha pronta para análise de ROI.</p>
+</div>
+
+<div id="resume-banner" class="resume-banner" style="display:none;">
+  <span>Encontramos seu progresso salvo. Deseja continuar de onde parou?</span>
+  <button class="btn-primary" onclick="resumeProgress()">Continuar</button>
+  <button class="btn-secondary" onclick="clearProgress()">Começar do zero</button>
+</div>
+
+<main class="main">
+
+  <div class="progress-bar" id="progress-bar"></div>
+
+  <!-- STEP 0: Contexto E1 -->
+  <div class="step active" id="step-0">
+    <div class="step-header">
+      <div class="step-tag">Etapa 0 · Contexto do E1</div>
+      <div class="step-title">O que você trouxe do encontro anterior?</div>
+      <div class="step-desc">Este exercício continua o que você iniciou na E1. Cole ou reescreva o que preencheu lá — esse contexto vai alimentar toda a análise a seguir.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Descrição do problema identificado na E1</div>
+      <textarea class="field-input" id="e1-problema" rows="4" placeholder="Ex: Nosso time de RH recebe 300 currículos por vaga e leva 3 semanas para triá-los manualmente. O custo invisível é a perda de candidatos bons que desistem pela demora." oninput="syncField('e1.problema', this.value)"></textarea>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Tipo de IA identificado</div>
+      <div class="options" id="opts-tipo-ia">
+        <div class="opt" onclick="selPill('e1.tipo_ia','preditiva',this,'opts-tipo-ia')">
+          <div class="opt-title">Preditiva</div>
+          <div class="opt-sub">Antecipa eventos futuros com base em dados históricos</div>
+        </div>
+        <div class="opt" onclick="selPill('e1.tipo_ia','discriminativa',this,'opts-tipo-ia')">
+          <div class="opt-title">Discriminativa</div>
+          <div class="opt-sub">Classifica inputs em categorias</div>
+        </div>
+        <div class="opt" onclick="selPill('e1.tipo_ia','generativa',this,'opts-tipo-ia')">
+          <div class="opt-title">Generativa</div>
+          <div class="opt-sub">Cria conteúdo novo: texto, código, análises</div>
+        </div>
+        <div class="opt" onclick="selPill('e1.tipo_ia','incerto',this,'opts-tipo-ia')">
+          <div class="opt-title">Não tenho certeza ainda</div>
+          <div class="opt-sub"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Limites estruturais e responsável pela revisão</div>
+      <textarea class="field-input" id="e1-limites" rows="3" placeholder="Ex: Se o modelo classificar errado, um bom candidato pode ser eliminado. A responsável por revisar casos limítrofes seria a coordenadora de RH." oninput="syncField('e1.limites_estruturais', this.value)"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn-primary" onclick="goTo(1)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: Perfil da empresa -->
+  <div class="step" id="step-1">
+    <div class="step-header">
+      <div class="step-tag">Etapa 1 · Perfil da empresa</div>
+      <div class="step-title">Qual é o contexto da sua empresa?</div>
+      <div class="step-desc">Essas informações definem quais arquiteturas são viáveis para o seu momento.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Tamanho do time</div>
+      <div class="options" id="opts-tamanho">
+        <div class="opt" onclick="selPill('empresa.tamanho','1-10',this,'opts-tamanho')"><div class="opt-title">1 a 10 pessoas</div><div class="opt-sub">Time enxuto</div></div>
+        <div class="opt" onclick="selPill('empresa.tamanho','11-50',this,'opts-tamanho')"><div class="opt-title">11 a 50 pessoas</div><div class="opt-sub">Em crescimento</div></div>
+        <div class="opt" onclick="selPill('empresa.tamanho','51-200',this,'opts-tamanho')"><div class="opt-title">51 a 200 pessoas</div><div class="opt-sub">Operação estruturada</div></div>
+        <div class="opt" onclick="selPill('empresa.tamanho','200+',this,'opts-tamanho')"><div class="opt-title">Mais de 200</div><div class="opt-sub">Grande porte</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Momento da empresa</div>
+      <div class="options" id="opts-momento">
+        <div class="opt" onclick="selPill('empresa.momento','validando',this,'opts-momento')"><div class="opt-title">Validando modelo</div><div class="opt-sub">Ainda testando o negócio</div></div>
+        <div class="opt" onclick="selPill('empresa.momento','crescendo',this,'opts-momento')"><div class="opt-title">Crescendo</div><div class="opt-sub">Produto validado, escalando</div></div>
+        <div class="opt" onclick="selPill('empresa.momento','escalonando',this,'opts-momento')"><div class="opt-title">Escalonando</div><div class="opt-sub">Crescimento acelerado</div></div>
+        <div class="opt" onclick="selPill('empresa.momento','madura',this,'opts-momento')"><div class="opt-title">Operação madura</div><div class="opt-sub">Processos estáveis</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Capacidade técnica interna</div>
+      <div class="options" id="opts-tech">
+        <div class="opt" onclick="selPill('empresa.capacidade_tecnica','nenhuma',this,'opts-tech')"><div class="opt-title">Nenhuma</div><div class="opt-sub">Sem time de tecnologia</div></div>
+        <div class="opt" onclick="selPill('empresa.capacidade_tecnica','terceirizada',this,'opts-tech')"><div class="opt-title">Terceirizada</div><div class="opt-sub">Agência ou freelancer</div></div>
+        <div class="opt" onclick="selPill('empresa.capacidade_tecnica','parcial',this,'opts-tech')"><div class="opt-title">Parcial</div><div class="opt-sub">1–2 devs internos</div></div>
+        <div class="opt" onclick="selPill('empresa.capacidade_tecnica','robusta',this,'opts-tech')"><div class="opt-title">Robusta</div><div class="opt-sub">Time técnico dedicado</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Orçamento disponível para IA</div>
+      <div class="options" id="opts-orcamento">
+        <div class="opt" onclick="selPill('empresa.orcamento','explorando',this,'opts-orcamento')"><div class="opt-title">Explorando</div><div class="opt-sub">Sem orçamento definido</div></div>
+        <div class="opt" onclick="selPill('empresa.orcamento','baixo',this,'opts-orcamento')"><div class="opt-title">Até USD 500/mês</div><div class="opt-sub">Orçamento inicial</div></div>
+        <div class="opt" onclick="selPill('empresa.orcamento','medio',this,'opts-orcamento')"><div class="opt-title">USD 500–2.000/mês</div><div class="opt-sub">Orçamento moderado</div></div>
+        <div class="opt" onclick="selPill('empresa.orcamento','alto',this,'opts-orcamento')"><div class="opt-title">Acima de USD 2.000/mês</div><div class="opt-sub">Orçamento amplo</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Ferramentas que já usa <span style="font-weight:400;color:var(--cinza-400)">(pode selecionar várias)</span></div>
+      <div class="options opts-multi" id="opts-ferramentas">
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','google_workspace',this)"><div class="opt-title">Google Workspace</div><div class="opt-sub">Gmail, Docs, Drive, Meet</div></div>
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','microsoft_365',this)"><div class="opt-title">Microsoft 365</div><div class="opt-sub">Word, Excel, Teams, Outlook</div></div>
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','chatgpt_plus',this)"><div class="opt-title">ChatGPT Plus</div><div class="opt-sub">OpenAI</div></div>
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','claude_pro',this)"><div class="opt-title">Claude Pro</div><div class="opt-sub">Anthropic</div></div>
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','gemini_advanced',this)"><div class="opt-title">Gemini Advanced</div><div class="opt-sub">Google</div></div>
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','copilot_m365',this)"><div class="opt-title">Copilot M365</div><div class="opt-sub">Microsoft</div></div>
+        <div class="opt" onclick="selMulti('empresa.ferramentas_atuais','nenhuma',this)"><div class="opt-title">Nenhuma dessas</div><div class="opt-sub"></div></div>
+      </div>
+      <div class="field-hint">Este campo alimenta a seção "Já disponível na assinatura?" do diagnóstico.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn-secondary" onclick="goTo(0)">← Voltar</button>
+      <button class="btn-primary" onclick="goTo(2)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: O processo -->
+  <div class="step" id="step-2">
+    <div class="step-header">
+      <div class="step-tag">Etapa 2 · O processo</div>
+      <div class="step-title">Qual processo você quer automatizar?</div>
+      <div class="step-desc">Descreva as características operacionais. Quanto mais preciso, mais útil será a análise.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Descreva o processo em uma frase</div>
+      <input class="field-input" type="text" id="proc-desc" placeholder="Ex: triagem de currículos recebidos por e-mail" oninput="syncField('processo.descricao', this.value)" />
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Frequência de execução</div>
+      <div class="options" id="opts-freq">
+        <div class="opt" onclick="selPill('processo.frequencia','pontual',this,'opts-freq')"><div class="opt-title">Pontual</div><div class="opt-sub">Sob demanda, sem regularidade</div></div>
+        <div class="opt" onclick="selPill('processo.frequencia','diaria',this,'opts-freq')"><div class="opt-title">Diária</div><div class="opt-sub">Executa todo dia</div></div>
+        <div class="opt" onclick="selPill('processo.frequencia','continua',this,'opts-freq')"><div class="opt-title">Contínua</div><div class="opt-sub">Tempo real, sem pausa</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Integração com sistemas externos</div>
+      <div class="options" id="opts-integracao">
+        <div class="opt" onclick="selPill('processo.integracao','nao',this,'opts-integracao')"><div class="opt-title">Não precisa</div><div class="opt-sub">Processo isolado</div></div>
+        <div class="opt" onclick="selPill('processo.integracao','simples',this,'opts-integracao')"><div class="opt-title">Integração simples</div><div class="opt-sub">1 sistema: e-mail, planilha</div></div>
+        <div class="opt" onclick="selPill('processo.integracao','multipla',this,'opts-integracao')"><div class="opt-title">Múltiplas integrações</div><div class="opt-sub">CRM, ERP, WhatsApp…</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Sensibilidade dos dados</div>
+      <div class="options" id="opts-dados">
+        <div class="opt" onclick="selPill('processo.dados','publica',this,'opts-dados')"><div class="opt-title">Dados públicos</div><div class="opt-sub">Sem restrição de privacidade</div></div>
+        <div class="opt" onclick="selPill('processo.dados','interna',this,'opts-dados')"><div class="opt-title">Dados internos</div><div class="opt-sub">Confidencial, sem regulação</div></div>
+        <div class="opt" onclick="selPill('processo.dados','sensiveis',this,'opts-dados')"><div class="opt-title">Dados sensíveis</div><div class="opt-sub">Saúde, jurídico, financeiro, RH</div></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Humano no loop</div>
+      <div class="options" id="opts-humano">
+        <div class="opt" onclick="selPill('processo.humano_loop','sempre',this,'opts-humano')"><div class="opt-title">Sempre</div><div class="opt-sub">Humano revisa cada output</div></div>
+        <div class="opt" onclick="selPill('processo.humano_loop','asvezes',this,'opts-humano')"><div class="opt-title">Às vezes</div><div class="opt-sub">Revisão em casos excepcionais</div></div>
+        <div class="opt" onclick="selPill('processo.humano_loop','nunca',this,'opts-humano')"><div class="opt-title">Nunca</div><div class="opt-sub">Totalmente automatizado</div></div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <div class="field-label">
+          Volume mensal de operações
+          <span class="help-trigger" onclick="toggleHelp('help-volume')">?</span>
+        </div>
+        <input class="field-input" type="number" id="proc-volume" min="0" placeholder="Ex: 660" oninput="syncField('processo.volume_mensal', parseInt(this.value)||0)" />
+        <div class="help-panel" id="help-volume">
+          1 currículo analisado = 1 operação. 1 mensagem respondida = 1 operação. Se é diário, multiplique por 22 dias úteis.
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">
+          Usuários que precisariam de acesso web
+        </div>
+        <input class="field-input" type="number" id="proc-usuarios" min="0" placeholder="Ex: 5" oninput="syncField('processo.usuarios_web', parseInt(this.value)||0)" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <div class="field-label">
+          Tokens de entrada por operação
+          <span class="help-trigger" onclick="toggleHelp('help-tokens-in')">?</span>
+        </div>
+        <input class="field-input" type="number" id="proc-tok-in" min="0" placeholder="Ex: 500" oninput="syncField('processo.tokens_entrada', parseInt(this.value)||0)" />
+        <div class="help-panel" id="help-tokens-in">
+          <table class="ref-table">
+            <tr><th>Documento</th><th>Tokens</th></tr>
+            <tr><td>1 e-mail curto</td><td>100–200</td></tr>
+            <tr><td>1 currículo (1 página)</td><td>400–600</td></tr>
+            <tr><td>1 contrato (10 páginas)</td><td>4.000–6.000</td></tr>
+            <tr><td>1 transcrição de reunião</td><td>8.000–12.000</td></tr>
+            <tr><td>Instrução do sistema</td><td>200–500</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">
+          Tokens de saída por operação
+          <span class="help-trigger" onclick="toggleHelp('help-tokens-out')">?</span>
+        </div>
+        <input class="field-input" type="number" id="proc-tok-out" min="0" placeholder="Ex: 300" oninput="syncField('processo.tokens_saida', parseInt(this.value)||0)" />
+        <div class="help-panel" id="help-tokens-out">
+          <table class="ref-table">
+            <tr><th>Output</th><th>Tokens</th></tr>
+            <tr><td>Classificação simples</td><td>50–150</td></tr>
+            <tr><td>Resumo de 1 parágrafo</td><td>150–250</td></tr>
+            <tr><td>Análise estruturada (3–5 pts)</td><td>300–500</td></tr>
+            <tr><td>Relatório completo</td><td>800–2.000</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn-secondary" onclick="goTo(1)">← Voltar</button>
+      <button class="btn-primary" onclick="runDiagnostico()">Ver diagnóstico →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Diagnóstico -->
+  <div class="step" id="step-3">
+    <div class="step-header">
+      <div class="step-tag">Etapa 3 · Diagnóstico</div>
+      <div class="step-title">Análise da sua arquitetura de IA</div>
+      <div class="step-desc">Com base no perfil da empresa e nas características do processo, o simulador identificou o nível de autonomia adequado, os melhores candidatos e o que você já tem disponível.</div>
+    </div>
+
+    <!-- 3A: Nível de autonomia -->
+    <div id="diag-nivel"></div>
+
+    <hr class="divider" />
+
+    <!-- 3C: Já disponível -->
+    <div class="step-tag" style="margin-bottom:10px;">Já disponível na sua assinatura?</div>
+    <p style="font-size:13px;color:var(--g5);margin-bottom:1rem;font-style:italic;">Antes de investir em qualquer solução nova, avalie se o que você já paga resolve — total ou parcialmente.</p>
+    <div id="diag-disponivel"></div>
+
+    <hr class="divider" />
+
+    <!-- 3B: Candidatos -->
+    <div class="step-tag" style="margin-bottom:10px;">Arquitetura recomendada e players candidatos</div>
+    <div id="diag-candidatos"></div>
+
+    <div class="nav">
+      <button class="btn-secondary" onclick="goTo(2)">← Voltar</button>
+      <button class="btn-primary" onclick="goTo(4)">Ver estimativa de custo →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Estimativa de custo -->
+  <div class="step" id="step-4">
+    <div class="step-header">
+      <div class="step-tag">Etapa 4 · Estimativa de custo</div>
+      <div class="step-title">Qual é o custo estimado de cada cenário?</div>
+      <div class="step-desc">Os valores abaixo são pré-populados com base nas suas respostas. Ajuste conforme necessário.</div>
+    </div>
+
+    <div id="calc-container"></div>
+
+    <p style="font-size:11px;color:var(--cinza-400);margin-top:0.5rem;">Preços de referência — verifique sempre a tabela atual do fornecedor antes de assinar.</p>
+
+    <hr class="divider" />
+
+    <div id="calc-resultado"></div>
+
+    <div class="nav">
+      <button class="btn-secondary" onclick="goTo(3)">← Voltar</button>
+      <button class="btn-primary" onclick="goTo(5)">Ver ficha final →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Ficha final -->
+  <div class="step" id="step-5">
+    <div class="step-header">
+      <div class="step-tag">Etapa 5 · Ficha final</div>
+      <div class="step-title">Sua ficha de arquitetura</div>
+      <div class="step-desc">Leve este entregável para a E3 — ele vai alimentar a análise de ROI do próximo encontro.</div>
+    </div>
+
+    <div id="ficha-final" class="ficha-final"></div>
+
+    <div class="nav">
+      <button class="btn-secondary" onclick="goTo(4)">← Voltar</button>
+      <button class="btn-primary btn-print" onclick="window.print()">Imprimir ficha</button>
+      <button class="btn-ghost" onclick="goTo(0)">Editar respostas</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'devfy_simulador_state';
+
+function defaultState() {
+  return {
+    versao: '3.0',
+    ultima_atualizacao: '',
+    etapa_atual: 0,
+    e1: { problema: '', tipo_ia: '', limites_estruturais: '' },
+    empresa: { tamanho: '', momento: '', capacidade_tecnica: '', orcamento: '', ferramentas_atuais: [] },
+    processo: { descricao: '', frequencia: '', integracao: '', dados: '', humano_loop: '', volume_mensal: 0, tokens_entrada: 0, tokens_saida: 0, usuarios_web: 0 },
+    provedores: { web_providers: [], api_providers: [], local_providers: [], orquestracao: '' },
+    resultado: { nivel_autonomia: 0, nivel_justificativa: '', candidatos: [], ja_disponivel: [], arquitetura_recomendada: '', cenarios_descartados: [] }
+  };
+}
+
+let currentState = defaultState();
+
+// ─── PERSISTENCE ─────────────────────────────────────────────────────────────
+function saveState() {
+  try {
+    currentState.ultima_atualizacao = new Date().toISOString();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentState));
+    updateSaveIndicator(currentState.ultima_atualizacao);
+  } catch(e) {
+    console.warn('localStorage indisponível — progresso não será salvo');
+  }
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.versao === '3.0') return parsed;
+    }
+  } catch(e) {}
+  return null;
+}
+
+function clearProgress() {
+  if (!confirm('Tem certeza? Todo o progresso salvo será apagado.')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  currentState = defaultState();
+  document.getElementById('resume-banner').style.display = 'none';
+  resetUI();
+  goTo(0);
+}
+
+function resumeProgress() {
+  document.getElementById('resume-banner').style.display = 'none';
+  populateUI();
+  goTo(currentState.etapa_atual);
+}
+
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+}
+
+const debouncedSave = debounce(saveState, 500);
+
+function updateSaveIndicator(iso) {
+  const el = document.getElementById('save-indicator');
+  if (!el || !iso) return;
+  const d = new Date(iso);
+  const h = String(d.getHours()).padStart(2,'0');
+  const m = String(d.getMinutes()).padStart(2,'0');
+  el.textContent = `Salvo às ${h}:${m}`;
+}
+
+// ─── FIELD SYNC ──────────────────────────────────────────────────────────────
+function syncField(path, value) {
+  const parts = path.split('.');
+  let obj = currentState;
+  for (let i = 0; i < parts.length - 1; i++) obj = obj[parts[i]];
+  obj[parts[parts.length - 1]] = value;
+  debouncedSave();
+}
+
+function selPill(path, value, el, groupId) {
+  document.querySelectorAll('#' + groupId + ' .opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  syncField(path, value);
+}
+
+function selMulti(path, value, el) {
+  const parts = path.split('.');
+  let obj = currentState;
+  for (let i = 0; i < parts.length - 1; i++) obj = obj[parts[i]];
+  const key = parts[parts.length - 1];
+
+  if (value === 'nenhuma') {
+    const wasSelected = el.classList.contains('selected');
+    document.querySelectorAll('#opts-ferramentas .opt').forEach(o => o.classList.remove('selected'));
+    if (!wasSelected) {
+      obj[key] = ['nenhuma'];
+      el.classList.add('selected');
+    } else {
+      obj[key] = [];
+    }
+  } else {
+    const list = obj[key];
+    const nonIdx = list.indexOf('nenhuma');
+    if (nonIdx !== -1) {
+      list.splice(nonIdx, 1);
+      document.querySelectorAll('#opts-ferramentas .opt').forEach(o => {
+        if ((o.getAttribute('onclick') || '').includes("'nenhuma'")) o.classList.remove('selected');
+      });
+    }
+    const idx = list.indexOf(value);
+    if (idx === -1) {
+      list.push(value);
+      el.classList.add('selected');
+    } else {
+      list.splice(idx, 1);
+      el.classList.remove('selected');
+    }
+  }
+  debouncedSave();
+}
+
+function toggleHelp(id) {
+  const p = document.getElementById(id);
+  p.classList.toggle('open');
+}
+
+// ─── UI POPULATION ───────────────────────────────────────────────────────────
+function resetUI() {
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  ['e1-problema','e1-limites','proc-desc','proc-volume','proc-usuarios','proc-tok-in','proc-tok-out'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+function populateUI() {
+  const s = currentState;
+
+  // E1
+  setVal('e1-problema', s.e1.problema);
+  setVal('e1-limites', s.e1.limites_estruturais);
+  restorePill('opts-tipo-ia', s.e1.tipo_ia);
+
+  // Empresa
+  restorePill('opts-tamanho', s.empresa.tamanho);
+  restorePill('opts-momento', s.empresa.momento);
+  restorePill('opts-tech', s.empresa.capacidade_tecnica);
+  restorePill('opts-orcamento', s.empresa.orcamento);
+  restoreMulti('opts-ferramentas', s.empresa.ferramentas_atuais);
+
+  // Processo
+  setVal('proc-desc', s.processo.descricao);
+  restorePill('opts-freq', s.processo.frequencia);
+  restorePill('opts-integracao', s.processo.integracao);
+  restorePill('opts-dados', s.processo.dados);
+  restorePill('opts-humano', s.processo.humano_loop);
+  setVal('proc-volume', s.processo.volume_mensal || '');
+  setVal('proc-usuarios', s.processo.usuarios_web || '');
+  setVal('proc-tok-in', s.processo.tokens_entrada || '');
+  setVal('proc-tok-out', s.processo.tokens_saida || '');
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (el && val !== undefined && val !== null && val !== 0) el.value = val;
+}
+
+function restorePill(groupId, value) {
+  if (!value) return;
+  document.querySelectorAll('#' + groupId + ' .opt').forEach(o => {
+    const onclick = o.getAttribute('onclick') || '';
+    if (onclick.includes("'" + value + "'")) o.classList.add('selected');
+  });
+}
+
+function restoreMulti(groupId, values) {
+  if (!values || !values.length) return;
+  document.querySelectorAll('#' + groupId + ' .opt').forEach(o => {
+    const onclick = o.getAttribute('onclick') || '';
+    values.forEach(v => {
+      if (onclick.includes("'" + v + "'")) o.classList.add('selected');
+    });
+  });
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+const STEP_LABELS = ['E1','Empresa','Processo','Diagnóstico','Custo','Ficha'];
+
+function buildProgressBar() {
+  const bar = document.getElementById('progress-bar');
+  bar.innerHTML = STEP_LABELS.map((label, i) => {
+    const isLast = i === STEP_LABELS.length - 1;
+    return `<div class="prog-step">
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="prog-dot" id="dot-${i}">${i}</div>
+        <div class="prog-label">${label}</div>
+      </div>
+      ${!isLast ? '<div class="prog-line" id="line-' + i + '"></div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function updateProgress(n) {
+  STEP_LABELS.forEach((_, i) => {
+    const dot = document.getElementById('dot-' + i);
+    if (!dot) return;
+    dot.classList.remove('active', 'done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+    if (i < STEP_LABELS.length - 1) {
+      const line = document.getElementById('line-' + i);
+      if (line) line.classList.toggle('done', i < n);
+    }
+  });
+}
+
+function goTo(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  currentState.etapa_atual = n;
+  updateProgress(n);
+  saveState();
+  if (n === 3 && currentState.resultado.nivel_autonomia > 0) renderDiagnosticoFromState();
+  if (n === 4) renderCalc();
+  if (n === 5) renderFicha();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── DIAGNÓSTICO ─────────────────────────────────────────────────────────────
+const niveis = {
+  1: {
+    label: 'Nível 1 — IA como interlocutor',
+    desc: 'Para este processo, a IA responde e o humano decide e age. Não há necessidade de integração com sistemas ou execução autônoma. O valor está na velocidade e qualidade das respostas geradas.',
+    exemplo: 'Equivalente ao uso do ChatGPT ou Claude via interface web com um projeto configurado.',
+    cor: 'nivel-1'
+  },
+  2: {
+    label: 'Nível 2 — IA como ferramenta integrada',
+    desc: 'Para este processo, a IA precisa consultar dados de sistemas externos para gerar respostas úteis. A integração via MCP ou API é o próximo passo natural.',
+    exemplo: 'Equivalente ao Claude Desktop conectado ao seu CRM via MCP, ou Gemini integrado ao Workspace.',
+    cor: 'nivel-2'
+  },
+  3: {
+    label: 'Nível 3 — IA como executor',
+    desc: 'Para este processo, a IA deve executar ações sobre sistemas reais sem intervenção humana em cada passo. Isso exige orquestração e governança bem definida.',
+    exemplo: 'Equivalente a um agente n8n que recebe, processa e responde automaticamente, ou Claude Code operando no terminal.',
+    cor: 'nivel-3'
+  },
+  4: {
+    label: 'Nível 4 — IA como orquestrador',
+    desc: 'Para este processo, múltiplos agentes especializados precisam trabalhar em conjunto, coordenados por um agente orquestrador. É a arquitetura mais sofisticada.',
+    exemplo: 'Equivalente a um sistema onde um agente extrai dados, outro consulta o CRM, outro gera a proposta e outro envia — tudo encadeado.',
+    cor: 'nivel-4'
+  }
+};
+
+function determinarNivel(processo, empresa) {
+  if (processo.integracao === 'multipla' &&
+      processo.humano_loop === 'nunca' &&
+      processo.volume_mensal > 5000 &&
+      ['parcial','robusta'].includes(empresa.capacidade_tecnica)) return 4;
+  if (processo.humano_loop === 'nunca' && processo.integracao !== 'nao') return 3;
+  if (processo.integracao !== 'nao' || processo.frequencia === 'continua') return 2;
+  return 1;
+}
+
+const todosOsCandidatos = [
+  { id:'web_claude',       nome:'Claude Pro (web)',              tipo:'web',         modelo:'anthropic', niveisOk:[1] },
+  { id:'web_chatgpt',      nome:'ChatGPT Plus (web)',            tipo:'web',         modelo:'openai',    niveisOk:[1] },
+  { id:'web_gemini',       nome:'Gemini Advanced (web)',         tipo:'web',         modelo:'google',    niveisOk:[1] },
+  { id:'api_claude',       nome:'Claude API + orquestração',     tipo:'api',         modelo:'anthropic', niveisOk:[2,3,4] },
+  { id:'api_gpt4o',        nome:'GPT-4o API + orquestração',    tipo:'api',         modelo:'openai',    niveisOk:[2,3,4] },
+  { id:'api_gemini_flash', nome:'Gemini Flash API',             tipo:'api',         modelo:'google',    niveisOk:[2,3,4] },
+  { id:'api_deepseek',     nome:'DeepSeek API',                 tipo:'api',         modelo:'deepseek',  niveisOk:[2,3] },
+  { id:'local_llama',      nome:'Llama (modelo local)',          tipo:'local',       modelo:'meta',      niveisOk:[2,3,4] },
+  { id:'hybrid_mcp',       nome:'Assinatura web + MCP próprio', tipo:'hibrido',     modelo:'anthropic', niveisOk:[2,3] },
+  { id:'hybrid_n8n',       nome:'API + n8n self-hosted',        tipo:'hibrido',     modelo:'multi',     niveisOk:[2,3,4] },
+  { id:'encapsulada',      nome:'Solução encapsulada (SaaS IA)',tipo:'encapsulada', modelo:'varios',    niveisOk:[1,2] },
+];
+
+const precosReferencia = {
+  api_claude:       { pIn: 3.00,  pOut: 15.00 },
+  api_gpt4o:        { pIn: 2.50,  pOut: 10.00 },
+  api_gemini_flash: { pIn: 0.075, pOut: 0.30  },
+  api_deepseek:     { pIn: 0.55,  pOut: 2.19  },
+};
+
+function scoreCandidato(candidato, nivel, processo, empresa) {
+  let score = 0;
+  const razoes = [];
+  const alertas = [];
+
+  if (candidato.niveisOk.includes(nivel)) {
+    score += 3;
+    razoes.push('Compatível com o nível de autonomia recomendado para este processo');
+  } else {
+    score -= 4;
+    alertas.push('Não suporta o nível de autonomia necessário para este processo');
+  }
+
+  if (processo.dados === 'sensiveis') {
+    if (candidato.tipo === 'local') { score += 4; razoes.push('Dados sensíveis ficam 100% na infraestrutura da empresa'); }
+    if (candidato.modelo === 'deepseek') { score -= 5; alertas.push('Jurisdição chinesa: não usar com dados sensíveis'); }
+    if (candidato.tipo === 'web') { score -= 2; alertas.push('Dados trafegam para servidores do fornecedor'); }
+    if (candidato.tipo === 'encapsulada') { score -= 2; alertas.push('Tratamento de dados depende do contrato com o fornecedor'); }
+  }
+
+  if (processo.volume_mensal > 10000 && candidato.tipo === 'api') { score += 2; razoes.push('Alto volume favorece custo por token vs. assinatura fixa'); }
+  if (processo.volume_mensal < 500 && candidato.tipo === 'web') { score += 1; razoes.push('Baixo volume não justifica investimento em API'); }
+  if (processo.volume_mensal > 10000 && candidato.tipo === 'web') { score -= 2; alertas.push('Interface web não escala para este volume'); }
+
+  if (empresa.capacidade_tecnica === 'nenhuma') {
+    if (candidato.tipo === 'local') { score -= 4; alertas.push('Modelo local inviável sem capacidade técnica interna'); }
+    if (candidato.id === 'hybrid_mcp') { score -= 2; alertas.push('MCP próprio exige ao menos capacidade técnica terceirizada'); }
+    if (candidato.id === 'hybrid_n8n') { score -= 2; alertas.push('n8n self-hosted exige configuração técnica'); }
+    if (candidato.tipo === 'encapsulada') { score += 2; razoes.push('Solução encapsulada não exige capacidade técnica interna'); }
+    if (candidato.tipo === 'web') { score += 1; razoes.push('Interface web não exige capacidade técnica para operar'); }
+  }
+  if (['robusta','parcial'].includes(empresa.capacidade_tecnica)) {
+    if (candidato.tipo === 'hibrido') { score += 2; razoes.push('Capacidade técnica disponível para construir solução híbrida'); }
+    if (candidato.tipo === 'local') { score += 1; razoes.push('Capacidade técnica disponível para operar modelo local'); }
+  }
+
+  if (['explorando','baixo'].includes(empresa.orcamento)) {
+    if (candidato.tipo === 'local') { score -= 3; alertas.push('Infra local tem custo fixo elevado para este orçamento'); }
+    if (candidato.modelo === 'deepseek') { score += 2; razoes.push('Custo ultra baixo compatível com orçamento inicial'); }
+    if (candidato.modelo === 'google' && candidato.tipo === 'api') { score += 1; razoes.push('Gemini Flash tem custo por token significativamente menor'); }
+  }
+
+  if (processo.integracao === 'multipla') {
+    if (candidato.tipo === 'web') { score -= 3; alertas.push('Interface web não suporta múltiplas integrações'); }
+    if (candidato.id === 'hybrid_n8n') { score += 3; razoes.push('n8n self-hosted ideal para múltiplas integrações com privacidade'); }
+    if (candidato.id === 'api_claude') { score += 2; razoes.push('Claude API + MCP suporta múltiplas integrações via protocolo padrão'); }
+  }
+
+  if (processo.frequencia === 'continua') {
+    if (candidato.tipo === 'web') { score -= 3; alertas.push('Processo contínuo é inviável via interface manual'); }
+    if (candidato.tipo === 'api') { score += 2; razoes.push('API ideal para processos contínuos em tempo real'); }
+  }
+
+  if (empresa.ferramentas_atuais.includes('claude_pro') && candidato.id === 'hybrid_mcp') {
+    score += 3; razoes.push('Você já tem Claude Pro — MCP via Claude Desktop não exige custo adicional de modelo');
+  }
+  if (empresa.ferramentas_atuais.includes('claude_pro') && candidato.id === 'web_claude') {
+    score += 2; razoes.push('Você já paga Claude Pro — sem custo adicional');
+  }
+  if (empresa.ferramentas_atuais.includes('google_workspace') && candidato.modelo === 'google') {
+    score += 2; razoes.push('Gemini já disponível no Workspace que você usa');
+  }
+  if (empresa.ferramentas_atuais.includes('microsoft_365') && candidato.modelo === 'openai' && candidato.tipo === 'web') {
+    score += 2; razoes.push('Copilot já disponível na sua licença M365');
+  }
+  if (empresa.ferramentas_atuais.includes('chatgpt_plus') && candidato.id === 'web_chatgpt') {
+    score += 2; razoes.push('Você já paga ChatGPT Plus — sem custo adicional');
+  }
+
+  if (empresa.momento === 'validando') {
+    if (candidato.tipo === 'local') { score -= 2; alertas.push('Fase de validação não justifica investimento em infra própria'); }
+    if (candidato.tipo === 'web') { score += 1; razoes.push('Fase de validação favorece soluções de baixo custo inicial'); }
+  }
+
+  return { ...candidato, score, razoes, alertas };
+}
+
+function verificarDisponivel(empresa, nivel, processo) {
+  const disponivel = [];
+  if (empresa.ferramentas_atuais.includes('claude_pro') && nivel <= 2) {
+    disponivel.push({
+      ferramenta: 'Claude Pro',
+      recurso: 'Claude Projects + base de conhecimento',
+      aplicacao: `Crie um projeto no Claude com os documentos relevantes para "${processo.descricao || 'seu processo'}". Resolve parcialmente sem nenhum desenvolvimento adicional.`,
+      limitacao: 'Não automatiza — ainda exige interação humana a cada operação.'
+    });
+  }
+  if (empresa.ferramentas_atuais.includes('claude_pro') && nivel === 2) {
+    disponivel.push({
+      ferramenta: 'Claude Pro + Claude Desktop',
+      recurso: 'MCP via Claude Desktop (sem custo adicional de modelo)',
+      aplicacao: 'Conecte o Claude Desktop ao seu CRM ou ERP via servidor MCP. O time continua usando a interface familiar do Claude, mas agora com acesso aos dados reais da operação.',
+      limitacao: 'Exige configuração técnica do servidor MCP — mas não exige trocar de ferramenta ou pagar mais pelo modelo.'
+    });
+  }
+  if (empresa.ferramentas_atuais.includes('google_workspace') && nivel <= 2) {
+    disponivel.push({
+      ferramenta: 'Google Workspace',
+      recurso: 'Gemini integrado (Gmail, Docs, Drive, Meet)',
+      aplicacao: 'Gemini já está disponível em toda a sua suite Google. Para processos que vivem dentro do ecossistema Google, pode cobrir o nível 1 e parte do nível 2 sem custo adicional.',
+      limitacao: 'Integrações com sistemas fora do ecossistema Google exigem API separada.'
+    });
+  }
+  if (empresa.ferramentas_atuais.includes('microsoft_365') && nivel <= 2) {
+    disponivel.push({
+      ferramenta: 'Microsoft 365',
+      recurso: 'Copilot M365 (Word, Excel, Teams, Outlook)',
+      aplicacao: 'Copilot já está disponível em toda a sua suite Microsoft. Cobre processos de nível 1 dentro do ecossistema Office sem desenvolvimento adicional.',
+      limitacao: 'Licença adicional de ~USD 30/usuário/mês pode ser necessária dependendo do plano atual.'
+    });
+  }
+  if (empresa.ferramentas_atuais.includes('chatgpt_plus') && nivel <= 1) {
+    disponivel.push({
+      ferramenta: 'ChatGPT Plus',
+      recurso: 'GPTs customizados + Projects',
+      aplicacao: 'Crie um GPT customizado com instruções específicas para o seu processo e base de conhecimento da empresa. Disponível para o time via link direto.',
+      limitacao: 'Não automatiza — exige interação humana a cada operação.'
+    });
+  }
+  return disponivel;
+}
+
+function calcCustoAPI(candidatoId, ops, tokIn, tokOut) {
+  const p = precosReferencia[candidatoId];
+  if (!p || !ops) return null;
+  return ((ops * tokIn / 1e6) * p.pIn) + ((ops * tokOut / 1e6) * p.pOut);
+}
+
+function tipoBadge(tipo) {
+  const map = { web:'Web', api:'API', local:'Local', hibrido:'Híbrido', encapsulada:'Encapsulado' };
+  return `<span class="tipo-badge tipo-${tipo}">${map[tipo] || tipo}</span>`;
+}
+
+function fitBadge(score) {
+  if (score >= 7) return '<span class="fit-badge fit-alto">fit alto</span>';
+  if (score >= 4) return '<span class="fit-badge fit-medio">fit médio</span>';
+  return '<span class="fit-badge fit-baixo">fit baixo</span>';
+}
+
+function fitLabel(score) {
+  if (score >= 7) return 'alto';
+  if (score >= 4) return 'médio';
+  return 'baixo';
+}
+
+function renderDiagnosticoFromState() {
+  const nivel = currentState.resultado.nivel_autonomia;
+  const nv = niveis[nivel];
+  if (!nv) return;
+
+  document.getElementById('diag-nivel').innerHTML = `
+    <div class="nivel-card ${nv.cor}">
+      <div class="nivel-numero">Nível ${nivel}</div>
+      <div class="nivel-label">${nv.label}</div>
+      <div class="nivel-desc">${nv.desc}</div>
+      <div class="nivel-exemplo"><strong>Exemplo prático:</strong> ${nv.exemplo}</div>
+    </div>`;
+
+  const disponivel = currentState.resultado.ja_disponivel || [];
+  if (disponivel.length === 0) {
+    document.getElementById('diag-disponivel').innerHTML = `
+      <div class="disponivel-card disponivel-vazio">
+        Nenhuma das ferramentas que você já usa cobre este caso de uso. Os candidatos abaixo partem do zero.
+      </div>`;
+  } else {
+    document.getElementById('diag-disponivel').innerHTML = disponivel.map(d => `
+      <div class="disponivel-card">
+        <div class="disponivel-header">
+          <strong>${d.ferramenta}</strong>
+          <span class="disponivel-recurso">${d.recurso}</span>
+        </div>
+        <div class="disponivel-aplicacao">${d.aplicacao}</div>
+        <div class="disponivel-limitacao">⚠️ ${d.limitacao}</div>
+      </div>`).join('');
+  }
+
+  const scored = currentState.resultado.candidatos || [];
+  const p = currentState.processo;
+  document.getElementById('diag-candidatos').innerHTML = scored.map(c => {
+    const custo = calcCustoAPI(c.id, p.volume_mensal, p.tokens_entrada, p.tokens_saida);
+    const custoStr = custo !== null ? `USD ${custo.toFixed(2)}/mês` : '—';
+    return `
+    <div class="candidato-card">
+      <div class="candidato-header">
+        <div>
+          <span class="candidato-nome">${c.nome}</span>
+          ${tipoBadge(c.tipo)}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${fitBadge(c.score)}
+          ${custo !== null ? `<span class="candidato-custo">~${custoStr}</span>` : ''}
+        </div>
+      </div>
+      ${c.razoes.length ? `<ul class="candidato-razoes">${c.razoes.map(r=>`<li>✓ ${r}</li>`).join('')}</ul>` : ''}
+      ${c.alertas.length ? `<ul class="candidato-alertas">${c.alertas.map(a=>`<li>⚠ ${a}</li>`).join('')}</ul>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function runDiagnostico() {
+  const p = currentState.processo;
+  const e = currentState.empresa;
+  const nivel = determinarNivel(p, e);
+  currentState.resultado.nivel_autonomia = nivel;
+
+  // 3A: Nível
+  const nv = niveis[nivel];
+  document.getElementById('diag-nivel').innerHTML = `
+    <div class="nivel-card ${nv.cor}">
+      <div class="nivel-numero">Nível ${nivel}</div>
+      <div class="nivel-label">${nv.label}</div>
+      <div class="nivel-desc">${nv.desc}</div>
+      <div class="nivel-exemplo"><strong>Exemplo prático:</strong> ${nv.exemplo}</div>
+    </div>`;
+
+  // 3C: Disponível
+  const disponivel = verificarDisponivel(e, nivel, p);
+  currentState.resultado.ja_disponivel = disponivel;
+  if (disponivel.length === 0) {
+    document.getElementById('diag-disponivel').innerHTML = `
+      <div class="disponivel-card disponivel-vazio">
+        Nenhuma das ferramentas que você já usa cobre este caso de uso. Os candidatos abaixo partem do zero.
+      </div>`;
+  } else {
+    document.getElementById('diag-disponivel').innerHTML = disponivel.map(d => `
+      <div class="disponivel-card">
+        <div class="disponivel-header">
+          <strong>${d.ferramenta}</strong>
+          <span class="disponivel-recurso">${d.recurso}</span>
+        </div>
+        <div class="disponivel-aplicacao">${d.aplicacao}</div>
+        <div class="disponivel-limitacao">⚠️ ${d.limitacao}</div>
+      </div>`).join('');
+  }
+
+  // 3B: Candidatos
+  const scored = todosOsCandidatos
+    .map(c => scoreCandidato(c, nivel, p, e))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
+  currentState.resultado.candidatos = scored;
+
+  document.getElementById('diag-candidatos').innerHTML = scored.map(c => {
+    const custo = calcCustoAPI(c.id, p.volume_mensal, p.tokens_entrada, p.tokens_saida);
+    const custoStr = custo !== null ? `USD ${custo.toFixed(2)}/mês` : '—';
+    return `
+    <div class="candidato-card">
+      <div class="candidato-header">
+        <div>
+          <span class="candidato-nome">${c.nome}</span>
+          ${tipoBadge(c.tipo)}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${fitBadge(c.score)}
+          ${custo !== null ? `<span class="candidato-custo">~${custoStr}</span>` : ''}
+        </div>
+      </div>
+      ${c.razoes.length ? `<ul class="candidato-razoes">${c.razoes.map(r=>`<li>✓ ${r}</li>`).join('')}</ul>` : ''}
+      ${c.alertas.length ? `<ul class="candidato-alertas">${c.alertas.map(a=>`<li>⚠ ${a}</li>`).join('')}</ul>` : ''}
+    </div>`;
+  }).join('');
+
+  goTo(3);
+}
+
+// ─── CALCULADORA ─────────────────────────────────────────────────────────────
+const limites = { explorando: 100, baixo: 500, medio: 2000, alto: Infinity };
+
+function renderCalc() {
+  const p = currentState.processo;
+  const e = currentState.empresa;
+  const candidatos = currentState.resultado.candidatos;
+  if (!candidatos || candidatos.length === 0) { goTo(3); return; }
+
+  const ops = p.volume_mensal || 0;
+  const tokIn = p.tokens_entrada || 0;
+  const tokOut = p.tokens_saida || 0;
+  const limite = limites[e.orcamento] || Infinity;
+
+  let html = `<div class="calc-table">
+    <div class="calc-row calc-header">
+      <div>Cenário</div><div>Tipo</div><div>Fit</div><div>Custo est. / mês</div><div>Status</div>
+    </div>`;
+
+  const resultados = candidatos.map(c => {
+    const custo = calcCustoAPI(c.id, ops, tokIn, tokOut);
+    const custoTotal = custo !== null ? custo : 0;
+    const descartado = (custo !== null && custoTotal > limite) || c.score < 3;
+    const motivoDescarte = custo !== null && custoTotal > limite
+      ? `Custo estimado (USD ${custoTotal.toFixed(2)}/mês) supera o orçamento declarado`
+      : c.score < 3 ? 'Fit insuficiente para o perfil da empresa e do processo' : null;
+    return { ...c, custoTotal, descartado, motivoDescarte };
+  });
+
+  currentState.resultado.cenarios_descartados = resultados.filter(r => r.descartado).map(r => ({ nome: r.nome, motivo: r.motivoDescarte }));
+
+  html += resultados.map(r => `
+    <div class="calc-row ${r.descartado ? 'calc-descartado' : 'calc-finalista'}">
+      <div><strong>${r.nome}</strong></div>
+      <div>${tipoBadge(r.tipo)}</div>
+      <div>${fitBadge(r.score)}</div>
+      <div>${r.custoTotal > 0 ? 'USD ' + r.custoTotal.toFixed(2) : '—'}</div>
+      <div>${r.descartado ? `<span class="status-descartado">✕ Descartado</span>` : `<span class="status-finalista">✓ Finalista</span>`}</div>
+    </div>
+    ${r.descartado && r.motivoDescarte ? `<div class="calc-motivo">${r.motivoDescarte}</div>` : ''}`
+  ).join('');
+
+  html += '</div>';
+
+  const finalistas = resultados.filter(r => !r.descartado);
+  if (finalistas.length > 0) {
+    html += `<div class="calc-transicao">Os cenários finalistas vão para sua ficha final e serão aprofundados com cálculo de ROI no próximo encontro (E3).</div>`;
+  }
+
+  document.getElementById('calc-container').innerHTML = html;
+  document.getElementById('calc-resultado').innerHTML = '';
+}
+
+// ─── FICHA FINAL ─────────────────────────────────────────────────────────────
+function renderFicha() {
+  const s = currentState;
+  const nivel = s.resultado.nivel_autonomia;
+  const nv = niveis[nivel] || niveis[1];
+  const candidatos = s.resultado.candidatos || [];
+  const finalistas = candidatos.filter(c => {
+    const d = s.resultado.cenarios_descartados || [];
+    return !d.find(x => x.nome === c.nome);
+  });
+  const descartados = s.resultado.cenarios_descartados || [];
+  const disponivel = s.resultado.ja_disponivel || [];
+
+  const now = new Date();
+  const dataExtenso = now.toLocaleDateString('pt-BR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  const melhorFinalista = finalistas.sort((a,b) => b.score - a.score)[0];
+
+  const fichaHTML = `
+    <div class="ficha-topo">
+      <div class="ficha-titulo">FICHA DE ARQUITETURA — DEVFY LEADERS</div>
+      <div class="ficha-data">Gerada em ${dataExtenso}</div>
+    </div>
+
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">PROBLEMA IDENTIFICADO (E1)</div>
+      <div class="ficha-conteudo">${s.e1.problema || '—'}</div>
+      ${s.e1.tipo_ia ? `<div class="ficha-meta"><strong>Tipo de IA:</strong> ${s.e1.tipo_ia}</div>` : ''}
+      ${s.e1.limites_estruturais ? `<div class="ficha-meta"><strong>Limites estruturais:</strong> ${s.e1.limites_estruturais}</div>` : ''}
+    </div>
+
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">NÍVEL DE AUTONOMIA RECOMENDADO</div>
+      <div class="ficha-nivel">Nível ${nivel} — ${nv.label.split('—')[1] ? nv.label.split('—')[1].trim() : ''}</div>
+      <div class="ficha-conteudo">${nv.desc}</div>
+    </div>
+
+    ${disponivel.length > 0 ? `
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">JÁ DISPONÍVEL NA ASSINATURA ATUAL</div>
+      ${disponivel.map(d => `<div class="ficha-disponivel"><strong>${d.ferramenta}:</strong> ${d.recurso}<br><span style="color:var(--g5)">${d.aplicacao}</span></div>`).join('')}
+    </div>` : `
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">JÁ DISPONÍVEL NA ASSINATURA ATUAL</div>
+      <div class="ficha-conteudo">Nenhuma ferramenta atual cobre este caso.</div>
+    </div>`}
+
+    ${finalistas.length > 0 ? `
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">CANDIDATOS FINALISTAS</div>
+      ${finalistas.map((c, i) => {
+        const custo = calcCustoAPI(c.id, s.processo.volume_mensal, s.processo.tokens_entrada, s.processo.tokens_saida);
+        return `<div class="ficha-candidato">
+          <strong>${i+1}. ${c.nome}</strong>${custo !== null ? ` — Custo est. USD ${custo.toFixed(2)}/mês` : ''} — Fit: ${fitLabel(c.score)}
+          ${c.razoes.length ? `<ul>${c.razoes.slice(0,3).map(r=>`<li>${r}</li>`).join('')}</ul>` : ''}
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+
+    ${descartados.length > 0 ? `
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">CENÁRIOS DESCARTADOS</div>
+      ${descartados.map(d => `<div class="ficha-descartado">• ${d.nome} — ${d.motivo}</div>`).join('')}
+    </div>` : ''}
+
+    <div class="ficha-secao">
+      <div class="ficha-secao-titulo">PRÓXIMO PASSO — E3</div>
+      ${melhorFinalista ? `<div class="ficha-proximo">Levar para análise de ROI: <strong>${melhorFinalista.nome}</strong></div>` : ''}
+      <div class="ficha-pergunta">"Qual é o retorno real dessa iniciativa nos próximos 12 meses?"</div>
+    </div>`;
+
+  document.getElementById('ficha-final').innerHTML = fichaHTML;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+buildProgressBar();
+updateProgress(0);
+
+const savedState = loadState();
+if (savedState) {
+  currentState = savedState;
+  document.getElementById('resume-banner').style.display = 'flex';
+  updateSaveIndicator(currentState.ultima_atualizacao);
+}
+
+</script>
+</body>
+</html>
